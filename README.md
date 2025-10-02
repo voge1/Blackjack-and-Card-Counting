@@ -1,6 +1,7 @@
 The assignment brief:
 
 Description
+
 This project will investigate various methods of card counting for the game of blackjack. These methods will then be implemented and simulations run to see how effective they are at shifting the playing odds from the dealer to the player. Factors such as complexity and rate of return will be considered. The project can then be extended to develop new methods of card counting which can be evaluated against the standard methods.
 
 A basic plan of work will be:
@@ -14,6 +15,7 @@ A basic plan of work will be:
 This project is a research type project that will develop code and an evaluation framework to investigate the success of various methods, it will not involve creating a GUI or app.
 
 Requirements
+
 Programming skills - the underlying language is not important and can be Java, python, C/C++, MATLAB, etc.
 
 Understanding of the game of blackjack.
