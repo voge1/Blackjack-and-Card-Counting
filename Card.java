@@ -10,7 +10,10 @@ public class Card {
         this.face = face;
     }
 
-    public int getValue(){return this.value;}
+    public int getValue(){
+        if (face_up) {return this.value;}
+        else {throw new FileNotFoundException("Card is Face-Down");}
+    }
 
     public void turnFaceUp(){
         face_up = True;
