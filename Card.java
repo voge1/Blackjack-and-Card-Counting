@@ -38,16 +38,16 @@ public class Card { // An individual card: It has a card face from which a value
 
     public void turn_over (String face) { // Flip a card: turn it face-up or face-down
         if (face == "up") {
-            this.face_up = true;
+            face_up = true;
         }
         else {
-            this.face_up = false;
+            face_up = false;
         }
     }
 
     public int get_value () {
        HashMap<String, Integer> face_values = get_hashmap();
-        if (this.face_up) {
+        if (face_up) {
             return face_values.get(card_face);
         }
         return 0;
