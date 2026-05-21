@@ -11,7 +11,7 @@ public class Algorithm{
     }
     
     protected ArrayList<Card> assess (Player our_player, Dealer dealer, Shoe shoe) {
-        this.players.remove(our_player);
+        players.remove(our_player);
         ArrayList<Card> other_visible_cards = new ArrayList<Card>();
         for (Player other_player : players) {
             other_player.get_hand().forEach( (card) -> {
@@ -26,10 +26,9 @@ public class Algorithm{
         return other_visible_cards;
     }
 
-    public String basic_strategy (Player our_player, Dealer dealer) { //ENHC - European No Hole Card - 4-8 decks
+    public String basic_strategy (ArrayList<Card> our_hand, Dealer dealer, Boolean can_bet_again) { //ENHC - European No Hole Card - 4-8 decks
         String recommended_play = "Error";
         int our_total = 0;Boolean soft = false;
-        ArrayList<Card> our_hand = our_player.get_hand();
         for (Card card:our_hand) {
             our_total += card.get_value();
             if (card.get_value() == 1 && our_total < 12) {
@@ -97,7 +96,7 @@ public class Algorithm{
             }
         }
         //Split
-        if (our_hand.get(0).get_value() == our_hand.get(1).get_value() && our_hand.size() == 2) {
+        if (our_hand.get(0).get_value() == our_hand.get(1).get_value() && our_hand.size() && can_bet_again) { // have to check if the player can bet here rather than later before the decision is made
             int card_number = our_hand.get(0).get_value();
             switch (card_number) {
                 case 2,3,7:
@@ -142,22 +141,41 @@ public class Algorithm{
         return recommended_play;
     }
 
-    //Actions
+    public String mimic_dealer (Player player) {
+        String recommended_play = "Error";
+        int our_total = 0;Boolean soft = false;
+        ArrayList<Card> our_hand = our_player.get_hand();
+        for (Card card:our_hand) {
+            our_total += card.get_value();
+            if (card.get_value() == 1 && our_total < 12) {
+                our_total += 10;
+                soft = true;
+            }
+        };
+        if (our_total < 17) {
+            recommended_play = "Hit";
+        }
+        else {
+            recommended_play = "Stand";
+        }
+        return recommended_play;
+    }
 
-   public void hit_action (Shoe shoe, Player player) {
-      
+    //ComplexActions
+
+   public String double_action (Shoe shoe, Player player) {
+    int bet = player.get_bet();
+    if (player.bet(bet)) {  //if player cannot afford to double their bet
+        shoe.deal(player, 1);
+        return "Stick";
+    }
+    shoe.deal(player, 1);
+    return "Hit";
    }
 
-   public void double_action () {
+   public ArrayList<Card> split_action (Shoe shoe, Player player) {
+    bet = player.get_bet();
+    card = player.get_hand().get(0);
 
    }
-
-   public void stick_action () {
-
-   }
-
-   public void split_action () {
-
-   }
-
 }
