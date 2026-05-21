@@ -25,14 +25,14 @@ public class Shoe {
 
     public void randomise_shoe () {
 
-        this.order.forEach( (n) -> {discard.add(n);});                  //Move all cards to discard
-        this.order.clear();                                             //Empty the shoe
+        order.forEach( (n) -> {discard.add(n);});                  //Move all cards to discard
+        order.clear();                                             //Empty the shoe
 
-        while (!this.discard.isEmpty()) {
+        while (!discard.isEmpty()) {
             int num = (int)Math.floor(Math.random() * discard.size());  //Select a random point in discard
             Card card = discard.get(num);                               //Grab the card from that point
             card.turn_over("down");
-            this.order.add(card);                                       //Put it on top of the shoe
+            order.add(card);                                       //Put it on top of the shoe
             discard.remove(num);                                        //Remove it from discard
         }
     }
@@ -40,8 +40,8 @@ public class Shoe {
     public void deal (Player player, int num) {
         for (int i = 0; i<num;i++) {
             if (order.isEmpty()) {randomise_shoe();}                        //if would deal from empty deck, reshuffle
-            Card card = this.order.get(0);
-            this.order.remove(0);
+            Card card = order.get(0);
+            order.remove(0);
             player.recieve_card(card);
         }
     }
@@ -54,4 +54,6 @@ public class Shoe {
     public ArrayList<Card> get_discard () {
         return discard;
     }
+
+    public split_action (Card card, )
 }
