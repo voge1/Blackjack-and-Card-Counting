@@ -14,7 +14,7 @@ public class Card { // An individual card: It has a card face from which a value
         String[] faces = {"Ace", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King"};
         int[] values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10};
 
-        HashMap<String, Integer> face_values = new HashMap<String, Integer>(13);
+        HashMap<String, Integer> face_values = new HashMap<>(13);
 
         for (int i = 0; i<12; i++) {
             face_values.put(faces[i], values[i]);
@@ -37,12 +37,7 @@ public class Card { // An individual card: It has a card face from which a value
     }
 
     public void turn_over (String face) { // Flip a card: turn it face-up or face-down
-        if (face == "up") {
-            face_up = true;
-        }
-        else {
-            face_up = false;
-        }
+        face_up = "up".equals(face);
     }
 
     public int get_value () {
