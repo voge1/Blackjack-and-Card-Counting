@@ -10,7 +10,7 @@ public class Shoe {
         this.deck_quantity = deck_quantity;
     }
 
-    ArrayList<Card> discard;
+    ArrayList<Card> discard = new ArrayList<>();
 
     public void populate_shoe () {
         String[] faces = {"Ace", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King"};

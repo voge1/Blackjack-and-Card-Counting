@@ -23,7 +23,7 @@ public class Algorithm{
         int our_total = 0;Boolean soft = false;
         for (Card card:our_hand) {
             our_total += card.get_value();
-            if (card.get_value() == 1 && our_total < 12) {
+            if (card.get_value() == 1 && our_total < 12 && soft == false) {
                 our_total += 10;
                 soft = true;
             }
@@ -134,10 +134,12 @@ public class Algorithm{
         String recommended_play;
         int our_total = 0;
         ArrayList<Card> our_hand = player.get_hand();
+        boolean soft = false;
         for (Card card:our_hand) {
             our_total += card.get_value();
-            if (card.get_value() == 1 && our_total < 12) {
+            if (card.get_value() == 1 && our_total < 12 && soft == false) { //soft here mainly prevents 2 Aces from counting as 22
                 our_total += 10;
+                soft = true;
             }
         }
         if (our_total < 17) {

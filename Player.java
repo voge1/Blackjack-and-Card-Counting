@@ -4,12 +4,14 @@ public class Player {
    String name;
    int chips;
 
+   ArrayList<ArrayList<Card>> hands = new ArrayList<> ();
+   ArrayList<Card> default_hand = new ArrayList <> ();
+   int bet = 0;
+
    public Player (String name, int chips) {
       this.name = name; this.chips = chips;
+      hands.add(default_hand);
    }
-
-   ArrayList<ArrayList<Card>> hands;
-   int bet = 0;
 
    //Getters & Setters
    public int get_chips() {return chips;}
@@ -23,6 +25,10 @@ public class Player {
       hands.get(0).add(card);
    }
 
+   public void recieve_chips (int amount) {
+      chips += amount;
+   }
+
    public void muck_hand (Shoe shoe) {
       hands.forEach( (hand) -> {
          hand.forEach( (card) -> {
@@ -30,6 +36,9 @@ public class Player {
          });
          hand.clear();
       });
+      ArrayList<Card> empty_hand = new ArrayList <> ();
+      hands.clear();
+      hands.add(empty_hand);
    }
 
    public Boolean bet (int amount) {
