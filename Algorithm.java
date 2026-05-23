@@ -20,6 +20,7 @@ public class Algorithm{
 
     public static String basic_strategy (ArrayList<Card> our_hand, Player dealer, Boolean can_bet_again) { //ENHC - European No Hole Card - 4-8 decks
         String recommended_play = "Error";
+        if (our_hand.size() < 1){return recommended_play;}
         int our_total = 0;Boolean soft = false;
         for (Card card:our_hand) {
             our_total += card.get_value();
@@ -29,30 +30,8 @@ public class Algorithm{
             }
         }
         int dealer_card = dealer.get_hand().get(0).get_value();
-        //Hard total
-        if (soft == false) {
-            if (our_total < 12) {
-                recommended_play = "Hit";
-                if ((our_total == 9 && (dealer_card < 7 && dealer_card > 2)) ||
-                    ((our_total == 10 || our_total == 11) && !(dealer_card == 10 || dealer_card == 1))) {
-                    recommended_play = "Double Down";
-                }
-            }
-            else if (our_total < 17) {
-                if ((dealer_card > 6 || dealer_card == 1) ||
-                (our_total == 12 && dealer_card < 3)){
-                    recommended_play = "Hit";
-                }
-                else if (our_total != 12 || dealer_card > 3) { //for read-ability keeping specifics that aren't necessary
-                    recommended_play = "Stand";
-                }
-            }
-            if (our_total > 16) {
-                recommended_play = "Stand";
-            }
-        }
         //Soft total
-        else if (soft == true) {
+        if (soft == true) {
             int other_card = our_total - 11; //if the total is soft and not 21, the value of all other cards will equal (total - 11)
             switch (other_card) {
                 case 2,3 -> {
@@ -80,9 +59,33 @@ public class Algorithm{
                     else if (dealer_card > 2 && dealer_card < 7 && can_bet_again) {
                         recommended_play = "Double Down";
                     }
-                    else {recommended_play = "Stand";}
+                    else {recommended_play = "Stick";}
                 }
-                case 8, 9 -> recommended_play = "Stand";
+                case 8, 9, 10 -> recommended_play = "Stick";
+                default -> {
+                    soft = false;
+                }
+            }
+        }
+        //Hard total
+        if (soft == false) {
+            if (our_total > 16) {
+                recommended_play = "Stick";
+            }
+            else if (our_total < 12) {
+                recommended_play = "Hit";
+                if ((our_total == 9 && (dealer_card < 7 && dealer_card > 2)) ||
+                    ((our_total == 10 || our_total == 11) && !(dealer_card == 10 || dealer_card == 1))) {
+                    recommended_play = "Double Down";
+                }
+            }
+            else if (our_total < 17) {
+                if ((dealer_card > 6 || dealer_card == 1) || (our_total == 12 && dealer_card <= 3)){
+                    recommended_play = "Hit";
+                }
+                else {
+                    recommended_play = "Stick";
+                }
             }
         }
         //Split
@@ -116,11 +119,11 @@ public class Algorithm{
                 }
                 case 9 -> {
                     if (dealer_card == 7 || dealer_card == 1 || dealer_card == 10) {
-                        recommended_play = "Stand";
+                        recommended_play = "Stick";
                     }
                     else {recommended_play = "Split";}
                 }
-                case 10 -> recommended_play = "Stand";
+                case 10 -> recommended_play = "Stick";
                 case 1 -> {
                     if (dealer_card == 1) {recommended_play = "Hit";}
                     else {recommended_play = "Split";}
@@ -142,11 +145,14 @@ public class Algorithm{
                 soft = true;
             }
         }
+        if (our_total > 21 && soft == true) {
+            our_total -= 10;
+        }
         if (our_total < 17) {
             recommended_play = "Hit";
         }
         else {
-            recommended_play = "Stand";
+            recommended_play = "Stick";
         }
         return recommended_play;
     }
