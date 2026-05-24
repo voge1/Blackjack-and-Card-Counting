@@ -16,24 +16,36 @@ public class Blackjack {
     public void run () {
         System.out.println("Populating shoe...");
         shoe.populate_shoe();shoe.randomise_shoe();             //top of the game - populate shoe, randomise shoe
+        int minimum_bet = 5;
         for (int i = 0; i < rounds; i++) {                     //top of the round
-            //System.out.println("Starting round "+i);
+            System.out.println("Starting round "+i);
             ArrayList<Player> round_players = players;
              for (Player player : players) {                    //check chip count and take bets -> minimum bet: 5
-                if (player.bet(5)) {
+                int chosen_bet = minimum_bet;
+                if (player.get_name().contains("K-O") && player.get_chips() >= minimum_bet) {
+                    chosen_bet = Algorithm.counter_bet(player, minimum_bet, dealer, shoe, players, "K-O");
+                }
+                if (player.get_name().contains("Hi-Lo") && player.get_chips() >= minimum_bet) {
+                    chosen_bet = Algorithm.counter_bet(player, minimum_bet, dealer, shoe, players, "Hi-Lo");
+                }
+                if (player.get_chips() >= minimum_bet) {
+                    player.bet(chosen_bet);
                     shoe.deal(player, 2);                       //deal
                 }
                 else {
                     round_players.remove(player);
                 }
             }
-            System.out.println(round_players);
+            ArrayList<String> player_names = new ArrayList<>();
+            round_players.forEach( (player) -> {player_names.add(player.get_name());});
+            System.out.println(player_names);
+            player_names.clear();
             shoe.deal(dealer, 1);                               //deal to dealer - in no hole card the dealer is only dealt the hole card after player action
 
-            //System.out.println("Dealer has "+dealer.get_hand().get(0).get_card_face());
+            System.out.println("Dealer has "+dealer.get_hand().get(0).get_card_face());
 
             for (Player player : round_players) {               //turn order
-                hand_algorithm(player, player.get_bet(), shoe, dealer); //the hand is also passed for recursion purposes
+                hand_algorithm(player, player.get_bet(), shoe, dealer, players); //the hand is also passed for recursion purposes
             }
             
             //dealer turn
@@ -70,7 +82,7 @@ public class Blackjack {
                     dealer_total = sum;
                 }
             }
-            //System.out.println("Dealer has "+dealer_total);
+            System.out.println("Dealer has "+dealer_total);
 
             for (Player player : round_players) {
                 for (ArrayList<Card> hand : player.get_all_hands()) {
@@ -98,14 +110,14 @@ public class Blackjack {
                     }
                 }
                 player.muck_hand(shoe);
-                //System.out.println(player.get_name()+" has "+player.get_chips()+" chips remaining");
+                System.out.println(player.get_name()+" has "+player.get_chips()+" chips remaining");
             }
             dealer.muck_hand(shoe);
         }
-    //System.out.println("Thank you for playing");
+    System.out.println("Thank you for playing");
 }
 
-    private static void hand_algorithm(Player player, int bet, Shoe shoe, Player dealer) {
+    private static void hand_algorithm(Player player, int bet, Shoe shoe, Player dealer, ArrayList<Player> players) {
         Boolean bust = false; Boolean soft = false; Boolean stick = false;
         int hand_total; //establish game state
         ArrayList<Card> hand = player.get_hand();
@@ -117,11 +129,11 @@ public class Blackjack {
                 case "Basic Strategy" -> {
                     recommended_play = Algorithm.basic_strategy(hand, dealer, can_bet_again);
                 }
-                case "Dealer Mimic" -> {
-                    recommended_play = Algorithm.mimic_dealer(player);
+                case "Hi-Lo Counting" -> {
+                    recommended_play = Algorithm.hi_lo_strategy(player, dealer, shoe, players, can_bet_again);
                 }
                 default -> {
-                    recommended_play = Algorithm.basic_strategy(hand, dealer, can_bet_again);
+                    recommended_play = Algorithm.mimic_dealer(player);
                 }
             }
 
@@ -136,7 +148,6 @@ public class Blackjack {
                         stick = true;
                     }
                     shoe.deal(player, 1); //if the double isn't affordable, it is a 'Hit' instead
-                    break;
                     } // IF YOU SPLIT AND DOUBLE DOWN, YOUR BET HAS DOUBLED ON THE FIRST HAND WITHOUT PAYING
 
                 case "Split" -> {
@@ -146,10 +157,9 @@ public class Blackjack {
                     shoe.deal(player, 1);                       //a card has been removed from the hand, so we add one to it
                     player.get_all_hands().set(0, split_hand);  //the split hand is moved to the front
                     shoe.deal(player, 1);                       //now that split_hand was moved to the list's front, it'll be dealt to
-                    hand_algorithm(player, bet, shoe, dealer);  //recur the method on this new split hand
+                    hand_algorithm(player, bet, shoe, dealer, players);  //recur the method on this new split hand
                     player.get_all_hands().add(player.get_hand());
                     player.get_all_hands().set(0, hand);
-                    break;
                     }
                 
                 case "Error" -> throw new ArithmeticException("Error calculating recommended move");
@@ -169,11 +179,11 @@ public class Blackjack {
             }
             if (hand_total > 21) {                                      //if still over, bust = true
                 bust = true;
-                //System.out.println(player.get_name()+" has busted!");
+                System.out.println(player.get_name()+" has busted!");
             }
-            //if (stick == true) {
-                //System.out.println(player.get_name()+" has "+hand_total);
-            //}
+            if (stick == true) {
+                System.out.println(player.get_name()+" has "+hand_total);
+            }
         }
     }
 }

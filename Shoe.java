@@ -10,6 +10,14 @@ public class Shoe {
         this.deck_quantity = deck_quantity;
     }
 
+    public int get_deck_quantity() {
+        return deck_quantity;
+    }
+    public int get_deck_size () {
+        return order.size();
+    }
+
+
     ArrayList<Card> discard = new ArrayList<>();
 
     public void populate_shoe () {
