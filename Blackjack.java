@@ -19,7 +19,7 @@ public class Blackjack {
             ArrayList<Integer> score = new ArrayList<>();
             scores.add(score);
         });
-        //System.out.println("Populating shoe...");
+        System.out.println("Populating shoe...");
         shoe.populate_shoe();shoe.randomise_shoe();             //top of the game - populate shoe, randomise shoe
         int minimum_bet = 5;
         for (int i = 0; i < rounds; i++) {                     //top of the round
@@ -43,11 +43,11 @@ public class Blackjack {
             }
             ArrayList<String> player_names = new ArrayList<>();
             round_players.forEach( (player) -> {player_names.add(player.get_name());});
-            //System.out.println(player_names);
+            System.out.println(player_names);
             player_names.clear();
             shoe.deal(dealer, 1);                               //deal to dealer - in no hole card the dealer is only dealt the hole card after player action
 
-            //System.out.println("Dealer has "+dealer.get_hand().get(0).get_card_face());
+            System.out.println("Dealer has "+dealer.get_hand().get(0).get_card_face());
 
             for (Player player : round_players) {               //turn order
                 hand_algorithm(player, player.get_bet(), shoe, dealer, players); //the hand is also passed for recursion purposes
@@ -87,7 +87,7 @@ public class Blackjack {
                     dealer_total = sum;
                 }
             }
-            //System.out.println("Dealer has "+dealer_total);
+            System.out.println("Dealer has "+dealer_total);
 
             for (Player player : round_players) {
                 for (ArrayList<Card> hand : player.get_all_hands()) {
@@ -115,7 +115,7 @@ public class Blackjack {
                     }
                 }
                 player.muck_hand(shoe);
-                //System.out.println(player.get_name()+" has "+player.get_chips()+" chips remaining");
+                System.out.println(player.get_name()+" has "+player.get_chips()+" chips remaining");
             }
             dealer.muck_hand(shoe);
             if (i % 5 == 0) {
@@ -126,7 +126,7 @@ public class Blackjack {
                 }
             }
         }
-    //System.out.println("Thank you for playing");
+    System.out.println("Thank you for playing");
     for (int i = 0; i < players.size(); i++) {
         System.out.println(players.get(i).get_name()+"'s scores:");
         System.out.println(scores.get(i));
@@ -195,10 +195,10 @@ public class Blackjack {
             }
             if (hand_total > 21) {                                      //if still over, bust = true
                 bust = true;
-                //System.out.println(player.get_name()+" has busted!");
+                System.out.println(player.get_name()+" has busted!");
             }
             if (stick == true) {
-                //System.out.println(player.get_name()+" has "+hand_total);
+                System.out.println(player.get_name()+" has "+hand_total);
             }
         }
     }
